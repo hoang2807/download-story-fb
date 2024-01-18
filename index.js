@@ -6,18 +6,23 @@ const express = require('express')
 const app = express()
 const PORT = 4000
 
+app.use(timeout('60s'))
 app.use(express.json())
+app.use(haltOnTimedout)
 
 function haltOnTimedout(req, res, next) {
   if (!req.timedout) return next()
-  else return res.status(408).json({
-    status: false,
-    message: 'Request Timeout',
-    results: ''
-  })
 }
 
-app.post('/', timeout('60s'), haltOnTimedout, async (req, res) => {
+app.use((err, req, res, next) => {
+  if (err.status === 503) {
+    res.status(503).send('Request timeout');
+  } else {
+    next(err);
+  }
+});
+
+app.post('/', async (req, res) => {
   const link = req.body.link
   if (!link)
     return res.status(400).json({
