@@ -1,14 +1,18 @@
 const browserObject = require('./browser');
 const scraperController = require('./pageController');
-const puppeteer = require('puppeteer');
 const { v4: uuidv4 } = require('uuid')
+const timeout = require('connect-timeout')
 const express = require('express')
 const app = express()
 const PORT = 4000
 
 app.use(express.json())
 
-app.post('/', async (req, res) => {
+function haltOnTimedout(req, res, next) {
+  if (!req.timedout) next()
+}
+
+app.post('/', timeout('60s'), haltOnTimedout, async (req, res) => {
   const link = req.body.link
   if (!link)
     return res.status(400).json({
@@ -23,7 +27,7 @@ app.post('/', async (req, res) => {
     // Pass the browser instance to the scraper controller
     const data = await scraperController(browserInstance, link)
 
-    res.status(200).json({
+    return res.status(200).json({
       status: true,
       message: 'success',
       results: {

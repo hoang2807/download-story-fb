@@ -1,12 +1,11 @@
 // ./book-scraper/pageController.js
-const pageScraper = require('./pageScraper');
 async function scrapeAll(browserInstance, link) {
     try {
         const browser = await browserInstance;
 
         const url = 'https://bravedown.com/vi/facebook-video-downloader'
         let page = await browser.newPage();
-        await page.setDefaultNavigationTimeout(0);
+        await page.setDefaultNavigationTimeout(60000);
 
         console.log(`Navigating to ${url}...`);
         await page.goto(url);
