@@ -8,7 +8,7 @@ async function scrapeAll(browserInstance, link) {
         await page.setDefaultNavigationTimeout(0);
 
         console.log(`Navigating to ${url}...`);
-        await page.goto(url);
+        await page.goto(url, { waitUntil: 'domcontentloaded' });
         await page.type('[class="form-control"]', link);
         await page.keyboard.press('Enter')
         const finalResponse = await page.waitForResponse(response =>
