@@ -9,7 +9,12 @@ const PORT = 4000
 app.use(express.json())
 
 function haltOnTimedout(req, res, next) {
-  if (!req.timedout) next()
+  if (!req.timedout) return next()
+  else return res.status(408).json({
+    status: false,
+    message: 'Request Timeout',
+    results: ''
+  })
 }
 
 app.post('/', timeout('60s'), haltOnTimedout, async (req, res) => {

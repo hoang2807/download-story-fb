@@ -5,7 +5,7 @@ const scraperObject = async (browser, link) => {
         await page.setDefaultNavigationTimeout(0);
 
         console.log(`Navigating to ${url}...`);
-        await page.goto(url);
+        await page.goto(url, { timeout: 0 });
         await page.type('[class="form-control"]', link);
         await page.keyboard.press('Enter')
         const finalResponse = await page.waitForResponse(response =>

@@ -5,7 +5,7 @@ async function scrapeAll(browserInstance, link) {
 
         const url = 'https://bravedown.com/vi/facebook-video-downloader'
         let page = await browser.newPage();
-        await page.setDefaultNavigationTimeout(60000);
+        await page.setDefaultNavigationTimeout(0);
 
         console.log(`Navigating to ${url}...`);
         await page.goto(url);
